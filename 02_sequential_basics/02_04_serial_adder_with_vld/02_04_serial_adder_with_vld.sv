@@ -28,6 +28,31 @@ module serial_adder_with_vld
   // only if vld is also high, otherwise last should be ignored.
   //
   // When rst is high, the module should reset its internal state.
+  logic p, g, c, c_next, total;
+  
+  assign sum = total;
 
+  always_comb begin
+    p = a ^ b;
+    g = a & b;
+    if (vld) begin
+       if(last) begin
+         c_next = 0;
+         total = p ^ c;
+       end
+       else begin
+         c_next = g | (p & c);
+         total = p ^ c;
+       end
+    end
+    else begin
+      c_next = c;
+      total = total;
+    end
+  end
+
+  always_ff @ (posedge clk) begin
+    c <= rst ? 0 : c_next;
+  end
 
 endmodule

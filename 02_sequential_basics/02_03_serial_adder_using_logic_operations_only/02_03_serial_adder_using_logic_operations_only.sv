@@ -49,6 +49,15 @@ module serial_adder_using_logic_operations_only
   // for information about the 1-bit full adder implementation.
   //
   // See the testbench for the output format ($display task).
+  logic p, g, c, c_next;
+
+  assign p = a ^ b; // propagate
+  assign g = a & b; // generate
+  assign { c_next, sum } = { g | (p & c), p ^ c };
+
+  always_ff @ (posedge clk) begin
+    c <= (rst) ? 1'b0 : c_next;
+  end
 
 
 endmodule

@@ -18,6 +18,17 @@ module halve_tokens
     // Example:
     // a -> 110_011_101_000_1111
     // b -> 010_001_001_000_0101
+    logic odd, curr_out;
+    assign b = curr_out;
+    always_ff @ (posedge clk) begin
+        if(rst) begin
+            curr_out <= 1'b0;
+            odd <= 1'b0;
+        end else begin
+            curr_out <= a & odd;
+            odd <= odd ^ a;
+        end
+    end
 
 
 endmodule
